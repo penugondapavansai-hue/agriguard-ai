@@ -1,0 +1,10 @@
+{
+  "name": "Remix AgriGuard AI",
+  "description": "AI-assisted crop disease diagnosis and comprehensive botanical plant care search with sunlight, watering, soil pH, seasonal routines, companion planting, and organic IPM solutions.",
+  "requestFramePermissions": [
+    "camera"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

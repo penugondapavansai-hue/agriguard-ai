@@ -1,0 +1,57 @@
+import { pgTable, text, timestamp, boolean, integer, jsonb, uuid } from "drizzle-orm/pg-core";
+
+export const analyses = pgTable("analyses", {
+  id: text("id").primaryKey(),
+  userId: text("user_id"),
+  analyzedAt: timestamp("analyzed_at", { withTimezone: true }).defaultNow().notNull(),
+  imageQuality: text("image_quality").notNull().default("good"),
+  plantDetected: boolean("plant_detected").notNull().default(true),
+  crop: text("crop").notNull(),
+  problem: text("problem").notNull(),
+  confidence: integer("confidence").notNull().default(0),
+  confidenceLevel: text("confidence_level").notNull().default("POSSIBLE"),
+  severity: text("severity").notNull().default("UNKNOWN"),
+  visualSymptoms: jsonb("visual_symptoms").notNull().$type<string[]>().default([]),
+  possibleCauses: jsonb("possible_causes").notNull().$type<string[]>().default([]),
+  recommendations: jsonb("recommendations").notNull().$type<string[]>().default([]),
+  ipm: jsonb("ipm").notNull().$type<string[]>().default([]),
+  prevention: jsonb("prevention").notNull().$type<string[]>().default([]),
+  monitoring: jsonb("monitoring").notNull().$type<string[]>().default([]),
+  expertAdvice: text("expert_advice").notNull().default(""),
+  isDemo: boolean("is_demo").default(false),
+  userNotes: text("user_notes"),
+  imageThumbnail: text("image_thumbnail"),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+});
+
+export const forumPosts = pgTable("forum_posts", {
+  id: text("id").primaryKey(),
+  userId: text("user_id").notNull(),
+  authorName: text("author_name").notNull(),
+  authorRole: text("author_role").notNull().default("farmer"),
+  authorLocation: text("author_location"),
+  crop: text("crop").notNull(),
+  title: text("title").notNull(),
+  content: text("content").notNull(),
+  category: text("category").notNull().default("general"),
+  urgency: text("urgency").notNull().default("medium"),
+  likesCount: integer("likes_count").notNull().default(0),
+  commentCount: integer("comment_count").notNull().default(0),
+  imageUrl: text("image_url"),
+  analysisId: text("analysis_id"),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
+});
+
+export const userProfiles = pgTable("user_profiles", {
+  uid: text("uid").primaryKey(),
+  email: text("email"),
+  displayName: text("display_name").notNull(),
+  photoURL: text("photo_url"),
+  role: text("role").notNull().default("farmer"),
+  location: text("location"),
+  cropSpecialty: text("crop_specialty"),
+  bio: text("bio"),
+  isVerifiedAgronomist: boolean("is_verified_agronomist").default(false),
+  joinedAt: timestamp("joined_at", { withTimezone: true }).defaultNow().notNull(),
+});
