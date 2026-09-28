@@ -7,6 +7,9 @@ declare global {
 }
 
 export const createPool = () => {
+  if (!process.env.SQL_HOST) {
+    return null;
+  }
   if (!global._postgresPool) {
     global._postgresPool = new Pool({
       host: process.env.SQL_HOST,
@@ -26,4 +29,4 @@ export const createPool = () => {
 
 const pool = createPool();
 
-export const db = drizzle(pool, { schema });
+export const db = pool ? drizzle(pool, { schema }) : (null as any);

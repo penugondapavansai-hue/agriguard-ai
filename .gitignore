@@ -38,3 +38,5 @@ yarn-error.log*
 # Temporary local tools
 mingit/
 mingit.zip
+
+.vercel

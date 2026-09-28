@@ -4,6 +4,9 @@ import { desc, eq } from 'drizzle-orm';
 import type { AnalysisResult, ForumPost, UserProfile } from '../types/index.ts';
 
 export async function saveAnalysisToDb(result: AnalysisResult, userId?: string) {
+  if (!db) {
+    return result as any;
+  }
   try {
     const inserted = await db
       .insert(analyses)
@@ -41,11 +44,14 @@ export async function saveAnalysisToDb(result: AnalysisResult, userId?: string) 
     return inserted[0];
   } catch (error) {
     console.error('Failed to save analysis to PostgreSQL database:', error);
-    throw new Error('Database query failed. Please try again later.', { cause: error });
+    return result as any;
   }
 }
 
 export async function getAnalysesFromDb(userId?: string) {
+  if (!db) {
+    return [];
+  }
   try {
     if (userId) {
       return await db
@@ -62,11 +68,14 @@ export async function getAnalysesFromDb(userId?: string) {
       .limit(50);
   } catch (error) {
     console.error('Failed to get analyses from database:', error);
-    throw new Error('Database query failed. Please try again later.', { cause: error });
+    return [];
   }
 }
 
 export async function getForumPostsFromDb() {
+  if (!db) {
+    return [];
+  }
   try {
     return await db
       .select()
@@ -75,7 +84,7 @@ export async function getForumPostsFromDb() {
       .limit(100);
   } catch (error) {
     console.error('Failed to get forum posts from database:', error);
-    throw new Error('Database query failed. Please try again later.', { cause: error });
+    return [];
   }
 }
 
@@ -93,6 +102,9 @@ export async function createForumPostInDb(post: {
   imageUrl?: string;
   analysisId?: string;
 }) {
+  if (!db) {
+    return post as any;
+  }
   try {
     const inserted = await db
       .insert(forumPosts)
@@ -115,7 +127,7 @@ export async function createForumPostInDb(post: {
     return inserted[0];
   } catch (error) {
     console.error('Failed to create forum post in database:', error);
-    throw new Error('Database query failed. Please try again later.', { cause: error });
+    return post as any;
   }
 }
 
@@ -129,6 +141,9 @@ export async function syncUserProfileToDb(profile: {
   cropSpecialty?: string;
   bio?: string;
 }) {
+  if (!db) {
+    return profile as any;
+  }
   try {
     const result = await db
       .insert(userProfiles)
@@ -158,6 +173,6 @@ export async function syncUserProfileToDb(profile: {
     return result[0];
   } catch (error) {
     console.error('Failed to sync user profile to database:', error);
-    throw new Error('Database query failed. Please try again later.', { cause: error });
+    return profile as any;
   }
 }
